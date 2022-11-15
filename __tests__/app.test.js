@@ -34,18 +34,9 @@ describe('1 GET/api/topics', () => {
     });
 });
 describe('2. GET API ARTICLES', () => {
-    test('status 200, should respond with an articles object with an array of articles', () => {
+    test('status 200, should respond with an articles object with an array of articles, sorted by date', () => {
         return request(app).get("/api/articles").expect(200).then((response)=>{
-            expect(response.body.articles).toEqual(expect.any(Array))
-            expect(response.body.articles.length).not.toEqual(0)
-            //console.log(Date(response.body.articles[0].created_at))
-            //console.log(response.body.articles[0], "im in the test")
-            //for (let i=0; i<response.body.articles.length; i++){
-            //    Date(response.body.articles[i].created_at)
-            //}
-            //console.log(response.body.articles[0], "im in the test, after loop")
-            // spent hours trying to convert everything to date format(and failing) to 
-            //then realize i didnt have to
+            expect(response.body.articles.length).toBeGreaterThan(0)
             response.body.articles.forEach((article)=>{
                 expect(article).toEqual(expect.objectContaining({
                     article_id : expect.any(Number),
