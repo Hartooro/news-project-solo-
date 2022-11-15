@@ -33,3 +33,37 @@ describe('1 GET/api/topics', () => {
         })
     });
 });
+describe('2. GET API ARTICLES', () => {
+    test('status 200, should respond with an articles object with an array of articles', () => {
+        return request(app).get("/api/articles").expect(200).then((response)=>{
+            expect(response.body.articles).toEqual(expect.any(Array))
+            expect(response.body.articles.length).not.toEqual(0)
+            //console.log(Date(response.body.articles[0].created_at))
+            //console.log(response.body.articles[0], "im in the test")
+            //for (let i=0; i<response.body.articles.length; i++){
+            //    Date(response.body.articles[i].created_at)
+            //}
+            //console.log(response.body.articles[0], "im in the test, after loop")
+            // spent hours trying to convert everything to date format(and failing) to 
+            //then realize i didnt have to
+            response.body.articles.forEach((article)=>{
+                expect(article).toEqual(expect.objectContaining({
+                    article_id : expect.any(Number),
+                    title: expect.any(String),
+                    topic : expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count : expect.any(String)
+                }))
+                
+            })
+
+            expect(response.body.articles).toBeSortedBy("created_at",{
+                descending : true,
+                coerce:true
+            })
+        })
+    });
+});
