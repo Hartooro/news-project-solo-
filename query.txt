@@ -1,1 +1,5 @@
 You are now connected to database "nc_news" as user "hartooro".
+ body 
+------
+(0 rows)
+
