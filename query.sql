@@ -1,9 +1,5 @@
-\c nc_news
+\c nc_news_test
 
-Select *, Count(*) cocomment
-From comments
-join  articles
-on comments.article_id =articles.article_id 
-group by articles.article_id , comment.comment_id ;
-
+Select * from articles
+where article_id = 1;
 

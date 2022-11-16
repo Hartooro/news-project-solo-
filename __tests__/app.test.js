@@ -58,3 +58,31 @@ describe('2. GET API ARTICLES', () => {
         })
     });
 });
+describe('4 get/api/articles/:article_id', () => {
+    test('code 200, returns article with specific ID', () => {
+        return request(app).get("/api/articles/1").expect(200).then(({body})=> {
+           expect(body.article).toEqual(expect.objectContaining({
+            article_id :1,
+            title : "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body : "I find this existence challenging",
+            created_at : "2020-07-09T20:11:00.000Z",
+            votes : 100
+
+           }))
+           
+        }
+        
+        )
+    });
+    
+  test('when searching an id not present, returns 404', () => {
+    return request(app).get('/api/articles/122').expect(404).then((res)=>{
+      expect(res.body.msg).toBe("article not found")
+    });
+  })
+  test('when inputted a different data type, returns status 400 ', () => {
+    return request(app).get("/api/articles/nonsensicalgibberish").expect(400)
+    })
+  })
