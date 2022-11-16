@@ -1,5 +1,5 @@
 const db = require("./db/connection")
-
+const {checkArticleExists} = require("./db/seeds/utils")
 exports.selectTopics = () => {
   
 
@@ -45,3 +45,21 @@ exports.fetchArticleById = (id) => {
          }
         })
  }
+
+
+
+ exports.fetchCommentsByArticleId = (id) => {
+    return checkArticleExists(id)
+    .then(()=>{
+        return db.query(
+            `SELECT * FROM comments 
+             WHERE article_id = $1
+             ORDER BY created_at desc;
+            `, [id]
+        )
+        .then((res)=>{
+            return res.rows
+        })
+    })
+ 
+}
