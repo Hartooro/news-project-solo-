@@ -1,5 +1,5 @@
-\c nc_news
+\c nc_news_test
 
-Select body from articles
-where article_id = 122;
+Select * from articles
+where article_id = 1;
 

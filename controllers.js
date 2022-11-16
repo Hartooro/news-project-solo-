@@ -20,10 +20,6 @@ exports.getArticleById = (req, res,next) => {
     const {id}= req.params;
     fetchArticleById(id)
     .then((result)=>{
-        if (result.length === 0){
-            
-            res.status(200).send(result)
-        }
         res.status(200).send({article : result})
     })
     .catch((err) => {
