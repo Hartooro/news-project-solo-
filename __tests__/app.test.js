@@ -115,7 +115,6 @@ describe('4 get/api/articles/:article_id', () => {
     })
     test('tests for a valid article, but no comments are found, so should return an empty array', () => {
         return request(app).get("/api/articles/4/comments").expect(200).then((res)=>{
-            console.log(res.body.comments)
             expect(res.body.comments.length).toBe(0)
             expect(res.body.comments).toEqual([])
         })
