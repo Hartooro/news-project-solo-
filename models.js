@@ -1,5 +1,5 @@
 const db = require("./db/connection")
-const {checkArticleExists} = require("./db/seeds/utils")
+const {checkArticleExists, checkAuthorExists} = require("./db/seeds/utils")
 exports.selectTopics = () => {
   
 
@@ -64,12 +64,28 @@ exports.fetchArticleById = (id) => {
  
 }
 exports.insertingComments = (body, id) => {
-    return db.query(`
-    INSERT INTO comments (body,author,article_id)
-    VALUES ($1, $2, $3)
-    RETURNING *;
-   `, [body.body, body.author, id])
-   .then((result)=> {
-    return result.rows[0]
-   })
+    return checkArticleExists(id)
+    .then(()=>{
+
+        if (Object.keys(body).length === 0){
+            return Promise.reject({
+                status : 400,
+                msg: "Bad, bad Request"
+            })
+        }
+        if ("author" in body && "body" in body ){
+            return checkAuthorExists(body.author)
+            .then(()=>{
+               return db.query(`
+                INSERT INTO comments (body,author,article_id)
+                VALUES ($1, $2, $3)
+                RETURNING *;
+               `, [body.body, body.author, id])
+               .then((result)=> {
+                return result.rows[0]
+               })
+            })
+        }
+
+    })
 }

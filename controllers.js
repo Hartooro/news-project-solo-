@@ -44,10 +44,8 @@ exports.postComment = (req,res,next) => {
     const body = req.body;
     insertingComments(body, id)
     .then((result)=>{
-
         res.status(201).send({comment:result})
     }).catch((err)=>{
-        
         next(err);
     })
 }

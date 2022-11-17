@@ -27,7 +27,7 @@ exports.checkArticleExists = (article_id) => {
   if(!article_id.match(/^\d+$/)){
     return Promise.reject({
        status:400,
-        msg:'What are you even searching for?'
+        msg:'Thats not gonna work, dude. Try inserting a number'
     })
 } else {
   return db
@@ -39,8 +39,19 @@ exports.checkArticleExists = (article_id) => {
     if (res.rows.length === 0){
       return Promise.reject({status:404, msg : "article not found!"})
     }
+  } 
+  )
+}}
+
+  
+exports.checkAuthorExists = (author) => {
+  return db.query(`
+  SELECT * FROM users 
+  WHERE username = $1;
+  `, [author])
+  .then((res)=>{
+    if (res.rows.length=== 0){
+      return Promise.reject({status : 404, msg: "author is nonexistant"})
+    }
   })
 }
-
-}
-  

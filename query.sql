@@ -1,3 +1,4 @@
 \c nc_news_test
 
-select * from comments;
+select * from users
+where username = 'lurker';
