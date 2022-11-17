@@ -98,7 +98,6 @@ describe('4 get/api/articles/:article_id', () => {
             
                expect(comment).toEqual(expect.objectContaining({
                 comment_id: expect.any(Number),
-                article_id : 5,
                 body : expect.any(String),
                 author: expect.any(String),
                 votes: expect.any(Number),
