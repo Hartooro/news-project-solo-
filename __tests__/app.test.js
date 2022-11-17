@@ -179,5 +179,13 @@ describe('4 get/api/articles/:article_id', () => {
     
             expect(res.body.msg).toBe("author is nonexistant")
         })
-    });;
+    })
+    test('returns 400 if author is valid but body is empty', () => {
+        const comment = {
+            author: "Blue power Ranger"
+        }
+        return request(app).post("/api/articles/4/comments").expect(400).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("Bad, bad Request. Please make sure there's a body and an author")
+        })
+    })
   });

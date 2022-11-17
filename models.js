@@ -85,6 +85,11 @@ exports.insertingComments = (body, id) => {
                 return result.rows[0]
                })
             })
+        } else {
+            return Promise.reject({
+                status: 400,
+                msg: "Bad, bad Request. Please make sure there's a body and an author"
+            })
         }
 
     })
