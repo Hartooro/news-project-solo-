@@ -104,18 +104,3 @@ describe("formatComments", () => {
   });
 });
 
-describe.skip('checkArticleExists', () => {
-  test('should return the existing article', () => {
-    const article = {
-      article_id :4,
-      title: "Student SUES Mitch!",
-      topic: "mitch",
-      author: "rogersop",
-      body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
-      created_at: 1588731240000,
-      votes: 0,
-    }
-    expect(checkArticleExists(4)).toEqual(article)
-    
-  });
-});
