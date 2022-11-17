@@ -3,6 +3,7 @@ const seed = require('../db/seeds/seed')
 const app = require("../app")
 const db = require("../db/connection")
 const testData = require('../db/data/test-data')
+const { response } = require("../app")
 
 beforeEach(() => seed(testData))
 
@@ -86,3 +87,46 @@ describe('4 get/api/articles/:article_id', () => {
     return request(app).get("/api/articles/nonsensicalgibberish").expect(400)
     })
   })
+
+
+  describe('5 get/api/articles/id/comments', () => {
+    test('returns 200, with the comments related to the article id', () => {
+        return request(app).get("/api/articles/5/comments").expect(200)
+        .then((res)=>{
+            expect(res.body.comments.length).toBe(2)
+            res.body.comments.forEach((comment)=>{
+            
+               expect(comment).toEqual(expect.objectContaining({
+                comment_id: expect.any(Number),
+                body : expect.any(String),
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at : expect.any(String)
+
+               }))
+               
+            })
+            expect(res.body.comments).toBeSortedBy("created_at",{
+                descending:true,
+                coerce: true
+            })
+        })
+    })
+    test('tests for a valid article, but no comments are found, so should return an empty array', () => {
+        return request(app).get("/api/articles/4/comments").expect(200).then((res)=>{
+            expect(res.body.comments.length).toBe(0)
+            expect(res.body.comments).toEqual([])
+        })
+    })
+    test('testing for invalid ID ', () => {
+        return request(app).get("/api/articles/currentlyListeningToMasayoshiTakanaka/comments").expect(400).then((res)=>{
+            expect(res.body.msg).toBe("What are you even searching for?")
+        })
+    })
+    test('testing for non existant endpoint', () => {
+        return request(app).get("/api/articles/124152/comments").expect(404).then((res)=>{
+            expect(res.body.msg).toBe("article not found!")
+        })
+    });
+  });
+  
