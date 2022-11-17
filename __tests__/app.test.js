@@ -98,6 +98,7 @@ describe('4 get/api/articles/:article_id', () => {
             
                expect(comment).toEqual(expect.objectContaining({
                 comment_id: expect.any(Number),
+                article_id: 5,
                 body : expect.any(String),
                 author: expect.any(String),
                 votes: expect.any(Number),
@@ -130,3 +131,35 @@ describe('4 get/api/articles/:article_id', () => {
     });
   });
   
+  describe('6 post/api/articles/id/comments', () => {
+    test('returns 201, with the added comment', () => {
+        const comment = {
+            author: "lurker",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/4/comments").expect(201).send(comment).then((res)=>{
+          
+            expect(res.body.comment).toEqual(expect.objectContaining({
+                article_id: 4,
+                author: "lurker",
+                body : "Power of Water, Powers Unite! Six working together to fight evil!",
+                comment_id: expect.any(Number)
+            }))
+        })
+    })
+    test('returns 400, if article id is invalid', () => {
+        const comment = {
+            author: "lurker",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/stonks/comments").expect(400).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("Bad, bad Request")
+        })
+    })
+    test('returns 400, if client tries to insert an empty object', () => {
+        const comment = {}
+        return request(app).post("/api/articles/stonks/comments").expect(400).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("Bad, bad Request")
+        })
+    })
+  });

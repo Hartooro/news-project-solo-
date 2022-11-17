@@ -63,3 +63,13 @@ exports.fetchArticleById = (id) => {
     })
  
 }
+exports.insertingComments = (body, id) => {
+    return db.query(`
+    INSERT INTO comments (body,author,article_id)
+    VALUES ($1, $2, $3)
+    RETURNING *;
+   `, [body.body, body.author, id])
+   .then((result)=> {
+    return result.rows[0]
+   })
+}
