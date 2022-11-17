@@ -24,6 +24,12 @@ exports.formatComments = (comments, idLookup) => {
 };
 
 exports.checkArticleExists = (article_id) => {
+  if(!article_id.match(/^\d+$/)){
+    return Promise.reject({
+       status:400,
+        msg:'What are you even searching for?'
+    })
+} else {
   return db
   .query(`
   SELECT * FROM articles 
@@ -35,3 +41,6 @@ exports.checkArticleExists = (article_id) => {
     }
   })
 }
+
+}
+  

@@ -118,5 +118,16 @@ describe('4 get/api/articles/:article_id', () => {
             expect(res.body.comments.length).toBe(0)
             expect(res.body.comments).toEqual([])
         })
+    })
+    test('testing for invalid ID ', () => {
+        return request(app).get("/api/articles/currentlyListeningToMasayoshiTakanaka/comments").expect(400).then((res)=>{
+            expect(res.body.msg).toBe("What are you even searching for?")
+        })
+    })
+    test('testing for non existant endpoint', () => {
+        return request(app).get("/api/articles/124152/comments").expect(404).then((res)=>{
+            expect(res.body.msg).toBe("article not found!")
+        })
     });
   });
+  
