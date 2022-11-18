@@ -255,7 +255,7 @@ describe('4 get/api/articles/:article_id', () => {
              expect(res.body.msg).toEqual("You can only edit the votes.")
          })
     })
-    test('rejects if user inserts invalid article id or non numerical', () => {
+    test('rejects if user inserts valid id but non existant', () => {
         const newVote = { inc_votes : 25}
          return request(app).patch("/api/articles/234125").send(newVote).expect(404).then((res)=>{
              expect(res.body.msg).toEqual("article not found!")
