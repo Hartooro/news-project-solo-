@@ -125,7 +125,7 @@ exports.modifyArticles = (id, updateValue ) => {
     } else {
         return Promise.reject({
             status : 400, 
-            msg : "you can only edit the votes. Nothing else!"
+            msg : "You can only edit the votes."
         })
     }
 }

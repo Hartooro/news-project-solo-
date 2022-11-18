@@ -232,14 +232,40 @@ describe('4 get/api/articles/:article_id', () => {
         const newVote = { inc_votes: 100,
             title : "Coding bootcamp for dummies" }
         return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
-            expect(res.body.msg).toEqual("you can only edit the votes. Nothing else!")
+            expect(res.body.msg).toEqual("You can only edit the votes.")
         })
     })
     test('Very similar to previous test, but only attempts to change one property, not votes ', () => {
         const newVote = {
             title : "Coding bootcamp for dummies" }
         return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
-            expect(res.body.msg).toEqual("you can only edit the votes. Nothing else!")
+            expect(res.body.msg).toEqual("You can only edit the votes.")
         })
-    });
+    })
+    test('rejects 400 if (a cheeky)user tries to patch votes with a non numerical value', () => {
+        const newVote = {
+           inc_votes: "DROP TABLE articles" }
+        return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
+            expect(res.body.msg).toEqual("Bad, bad Request")
+        })
+    })
+    test('rejects 400 if a user tries to patch with an empty object', () => {
+        const newVote = { }
+         return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
+             expect(res.body.msg).toEqual("You can only edit the votes.")
+         })
+    })
+    test('rejects if user inserts invalid article id or non numerical', () => {
+        const newVote = { inc_votes : 25}
+         return request(app).patch("/api/articles/234125").send(newVote).expect(404).then((res)=>{
+             expect(res.body.msg).toEqual("article not found!")
+         })
+    })
+    test('rejects if user inserts non numerical id', () => {
+        const newVote = { inc_votes : 25}
+         return request(app).patch("/api/articles/yoursonsandyourdaughtersarebeyondyourcommand").send(newVote).expect(400).then((res)=>{
+             expect(res.body.msg).toEqual("Thats not gonna work, dude. Try inserting a number")
+         })
+    })
+    
     });
