@@ -94,3 +94,38 @@ exports.insertingComments = (body, id) => {
 
     })
 }
+
+
+exports.modifyArticles = (id, updateValue ) => {
+    if (Object.keys(updateValue).length === 1 && "inc_votes" in updateValue){
+    return checkArticleExists(id).then(()=>{
+
+        if (!updateValue){
+            return Promise.reject({
+                status:400,
+                msg : "try again"
+            })
+        } 
+            return db
+            .query(`UPDATE articles 
+            SET votes = votes + $2
+            WHERE article_id = $1
+            RETURNING*;`,[id, updateValue.inc_votes]).then((result)=>{
+               if(result.rows[0].votes < 0){
+                   return Promise.reject({
+                       status : 400,
+                       msg: "votes cannot be negative."
+                   })
+               }
+               
+              return result.rows[0]
+            })
+        
+    })
+    } else {
+        return Promise.reject({
+            status : 400, 
+            msg : "you can only edit the votes. Nothing else!"
+        })
+    }
+}

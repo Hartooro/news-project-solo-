@@ -189,3 +189,57 @@ describe('4 get/api/articles/:article_id', () => {
         })
     })
   });
+
+  describe('7 patch/api/articles/:id', () => {
+    test('should update the votes property of an existing comment, increase by 100', () => {
+        const newVote = { inc_votes : 100 
+        }
+        return request(app).patch("/api/articles/1").send(newVote).expect(200).then((res)=>{
+            expect(res.body.article).toEqual(expect.objectContaining(
+                {
+                    article_id :1,
+                    title : "Living in the shadow of a great man",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body : "I find this existence challenging",
+                    created_at : "2020-07-09T20:11:00.000Z",
+                    votes : 200
+            }))
+        })
+    });
+    test('should update the votes property of an existing comment, decreased by 50', () => {
+        const newVote = { inc_votes : -50 }
+        return request(app).patch("/api/articles/1").send(newVote).expect(200).then((res)=>{
+            expect(res.body.article).toEqual(expect.objectContaining(
+                {
+                    article_id :1,
+                    title : "Living in the shadow of a great man",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body : "I find this existence challenging",
+                    created_at : "2020-07-09T20:11:00.000Z",
+                    votes : 50
+            }))
+        })
+    })
+    test('testing what happens if we decrease too much ', () => {
+        const newVote = { inc_votes : -500 }
+        return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
+            expect(res.body.msg).toEqual("votes cannot be negative.")
+        })
+    })
+    test('should reject patch requests that attempt to edit other values', () => {
+        const newVote = { inc_votes: 100,
+            title : "Coding bootcamp for dummies" }
+        return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
+            expect(res.body.msg).toEqual("you can only edit the votes. Nothing else!")
+        })
+    })
+    test('Very similar to previous test, but only attempts to change one property, not votes ', () => {
+        const newVote = {
+            title : "Coding bootcamp for dummies" }
+        return request(app).patch("/api/articles/1").send(newVote).expect(400).then((res)=>{
+            expect(res.body.msg).toEqual("you can only edit the votes. Nothing else!")
+        })
+    });
+    });

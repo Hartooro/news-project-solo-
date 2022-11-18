@@ -1,6 +1,1 @@
 You are now connected to database "nc_news_test" as user "hartooro".
- username |    name    |                                avatar_url                                 
-----------+------------+---------------------------------------------------------------------------
- lurker   | do_nothing | https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png
-(1 row)
-
