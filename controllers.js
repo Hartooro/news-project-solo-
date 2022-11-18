@@ -1,4 +1,4 @@
-const {selectTopics, selectArticles, fetchArticleById, fetchCommentsByArticleId} = require("./models")
+const {selectTopics, selectArticles, fetchArticleById, fetchCommentsByArticleId, insertingComments} = require("./models")
 
 exports.getTopics = (req,res,next) => {
     selectTopics().then((result)=>{
@@ -37,4 +37,15 @@ exports.getCommentsByArticleId = (req,res,next) => {
         next(err);
     })
 
+}
+
+exports.postComment = (req,res,next) => {
+    const {id} = req.params;
+    const body = req.body;
+    insertingComments(body, id)
+    .then((result)=>{
+        res.status(201).send({comment:result})
+    }).catch((err)=>{
+        next(err);
+    })
 }

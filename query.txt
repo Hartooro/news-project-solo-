@@ -1,6 +1,6 @@
 You are now connected to database "nc_news_test" as user "hartooro".
- article_id |        title        | topic |  author  |                                                                                     body                                                                                      |     created_at      | votes 
-------------+---------------------+-------+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+-------
-          4 | Student SUES Mitch! | mitch | rogersop | We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages | 2020-05-06 02:14:00 |     0
+ username |    name    |                                avatar_url                                 
+----------+------------+---------------------------------------------------------------------------
+ lurker   | do_nothing | https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png
 (1 row)
 

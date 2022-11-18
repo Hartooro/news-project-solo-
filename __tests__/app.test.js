@@ -98,6 +98,7 @@ describe('4 get/api/articles/:article_id', () => {
             
                expect(comment).toEqual(expect.objectContaining({
                 comment_id: expect.any(Number),
+                article_id: 5,
                 body : expect.any(String),
                 author: expect.any(String),
                 votes: expect.any(Number),
@@ -120,7 +121,7 @@ describe('4 get/api/articles/:article_id', () => {
     })
     test('testing for invalid ID ', () => {
         return request(app).get("/api/articles/currentlyListeningToMasayoshiTakanaka/comments").expect(400).then((res)=>{
-            expect(res.body.msg).toBe("What are you even searching for?")
+            expect(res.body.msg).toBe("Thats not gonna work, dude. Try inserting a number")
         })
     })
     test('testing for non existant endpoint', () => {
@@ -130,3 +131,61 @@ describe('4 get/api/articles/:article_id', () => {
     });
   });
   
+  describe('6 post/api/articles/id/comments', () => {
+    test('returns 201, with the added comment', () => {
+        const comment = {
+            author: "lurker",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/4/comments").expect(201).send(comment).then((res)=>{
+            expect(res.body.comment).toEqual(expect.objectContaining({
+                article_id: 4,
+                author: "lurker",
+                body : "Power of Water, Powers Unite! Six working together to fight evil!",
+                comment_id: expect.any(Number)
+            }))
+        })
+    })
+    test('returns 400, if article id is invalid', () => {
+        const comment = {
+            author: "lurker",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/stonks/comments").expect(400).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("Thats not gonna work, dude. Try inserting a number")
+        })
+    })
+    test('returns 400, if client tries to insert an empty object', () => {
+        const comment = {}
+        return request(app).post("/api/articles/4/comments").expect(400).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("Bad, bad Request")
+        })
+    })
+    test('returns 404 if wanting to post in an article that doesnt exist', () => {
+        const comment = {
+            author: "lurker",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/9999999/comments").expect(404).send(comment).then((res)=>{
+            expect(res.body.msg).toBe("article not found!")
+        })
+    })
+    test('returns 400 if wanting to post from a user that doesnt exist', () => {
+        const comment = {
+            author: "Blue power Ranger",
+            body : "Power of Water, Powers Unite! Six working together to fight evil!"
+        }
+        return request(app).post("/api/articles/4/comments").send(comment).expect(404).then((res)=>{
+    
+            expect(res.body.msg).toBe("author is nonexistant")
+        })
+    })
+    test('returns 400 if author is valid but body is empty', () => {
+        const comment = {
+            author: "Blue power Ranger"
+        }
+        return request(app).post("/api/articles/4/comments").send(comment).expect(400).then((res)=>{
+            expect(res.body.msg).toBe("Bad, bad Request. Please make sure there's a body and an author")
+        })
+    })
+  });
