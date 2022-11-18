@@ -175,7 +175,7 @@ describe('4 get/api/articles/:article_id', () => {
             author: "Blue power Ranger",
             body : "Power of Water, Powers Unite! Six working together to fight evil!"
         }
-        return request(app).post("/api/articles/4/comments").expect(404).send(comment).then((res)=>{
+        return request(app).post("/api/articles/4/comments").send(comment).expect(404).then((res)=>{
     
             expect(res.body.msg).toBe("author is nonexistant")
         })
@@ -184,7 +184,7 @@ describe('4 get/api/articles/:article_id', () => {
         const comment = {
             author: "Blue power Ranger"
         }
-        return request(app).post("/api/articles/4/comments").expect(400).send(comment).then((res)=>{
+        return request(app).post("/api/articles/4/comments").send(comment).expect(400).then((res)=>{
             expect(res.body.msg).toBe("Bad, bad Request. Please make sure there's a body and an author")
         })
     })
